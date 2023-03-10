@@ -87,17 +87,37 @@ app.post('/api/users', async (req, res) => {
 app.get('/api/users/:_id/logs', async (req, res) => {
   const { _id } = req.params
 
-  Log.findOne({ user_id: _id }, (err, userLog) => {
+  Log.findOne({ user_id: _id }, async (err, userLog) => {
     if (err) return res.send('error')
     if (!userLog) return res.send("user doesn't exists")
 
     const { username, count } = userLog
 
+    let logs = userLog.log
+
+    //let query = await Log.findOne({ user_id: _id }).select('log -_id').limit(5)
+    let total = userLog.log.length
+
+    const { from, to } = req.query
+
+    if (from && to) {
+      logs.filter(
+        (log) =>
+          new Date(log.date) <= new Date(to) &&
+          new Date(log.date) >= new Date(from)
+      )
+    }
+
+    const { limit } = req.query
+    if (limit) {
+      total = parseInt(limit)
+    }
+
     res.json({
       _id: userLog.user_id,
       username,
       count,
-      log: userLog.log.map((log) => {
+      log: logs.slice(0, total).map((log) => {
         return {
           description: log.description,
           duration: log.duration,
@@ -105,6 +125,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
         }
       }),
     })
+
     console.log(req.body, req.params, req.query)
   })
 })

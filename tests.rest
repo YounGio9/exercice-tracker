@@ -1,11 +1,19 @@
 GET https://vast-sleet-sky.glitch.me/api/users
+
 ###
+
 GET  https://vast-sleet-sky.glitch.me/api/users/63eb76c1d4377500bdada51f/logs
+
 ###
-POST https://vast-sleet-sky.glitch.me/api/users/63eb76c1d4377500bdada51f/exercises HTTP/1.1
+
+POST https://vast-sleet-sky.glitch.me/api/users/63eb76c1d4377500bdada51f/exercises
 Content-Type: application/json
+
 {
     "description": "test",
-    "duration": 60,
-    "date": "2023-08-20"
+    "duration": 60
 }
+
+###
+
+GET https://vast-sleet-sky.glitch.me/api/users/63eb76c1d4377500bdada51f/logs
